@@ -32,3 +32,23 @@ int16_t ReadShort(char* dataArray, size_t startIndex) {
 uint16_t ReadUnsignedShort(char* dataArray, size_t startIndex) {
     return 0u | ReadShort(dataArray, startIndex);
 }
+
+// Reads and returns a copy of a signed 4 byte integer
+// from the given data starting at the given index.
+int32_t ReadInt(char* dataArray, size_t startIndex) {
+    int32_t intValue = 0;
+
+    if (IsSystemBigEndian()) {
+        intValue = (intValue | dataArray[startIndex]) << 24;
+        intValue = (intValue | dataArray[startIndex + 1]) << 16;
+        intValue = (intValue | dataArray[startIndex + 2]) << 8;
+        intValue = (intValue | dataArray[startIndex + 3]);
+    } else {
+        intValue = (intValue | dataArray[startIndex + 3]) << 24;
+        intValue = (intValue | dataArray[startIndex + 2]) << 16;
+        intValue = (intValue | dataArray[startIndex + 1]) << 8;
+        intValue = (intValue | dataArray[startIndex]);
+    }
+
+    return intValue;
+}
