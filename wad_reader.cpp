@@ -52,3 +52,10 @@ int32_t ReadInt(char* dataArray, size_t startIndex) {
 
     return intValue;
 }
+
+// Reads and returns a copy of an unsigned 4 byte integer
+// from the given data starting at the given index. This is the same logic
+// as ReadInt but bytes are reinterpreted as unsigned.
+uint32_t ReadUnsignedInt(char* dataArray, size_t startIndex) {
+    return 0u | ReadInt(dataArray, startIndex);
+}
