@@ -26,3 +26,9 @@ int16_t ReadShort(char* dataArray, size_t startIndex) {
     return ((0 | upperByte) << 8) | lowerByte;
 }
 
+// Reads and returns a copy of an unsigned 2 byte integer
+// from the given data starting at the given index. This is the same logic
+// as ReadShort but the bytes are reinterpreted as unsigned.
+uint16_t ReadUnsignedShort(char* dataArray, size_t startIndex) {
+    return 0u | ReadShort(dataArray, startIndex);
+}
