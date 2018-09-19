@@ -1,6 +1,9 @@
 // Code for reading WAD files. WAD files are the data file format used in DOOM.
 // They store all of the data related to the game (levels, enemy placement, etc)
+//
 // Functions assume data is stored in big endian.
+//
+// Start indices are always inclusive.
 
 #include <string>
 #include "utilities.cpp"
