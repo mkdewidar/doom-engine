@@ -2,6 +2,7 @@
 // They store all of the data related to the game (levels, enemy placement, etc)
 // Functions assume data is stored in big endian.
 
+#include <string>
 #include "utilities.cpp"
 
 // Reads and returns a copy of a signed 2 byte integer
@@ -58,4 +59,10 @@ int32_t ReadInt(char* dataArray, size_t startIndex) {
 // as ReadInt but bytes are reinterpreted as unsigned.
 uint32_t ReadUnsignedInt(char* dataArray, size_t startIndex) {
     return 0u | ReadInt(dataArray, startIndex);
+}
+
+// Reads and copies 'length' number of characters from 'sourceData'
+// starting at 'startIndex' into the string object 'dest' replacing it in the process.
+void ReadString(char* sourceData, size_t startIndex, size_t length, std::string& dest) {
+    dest = std::string(sourceData + startIndex, length);
 }
