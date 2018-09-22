@@ -8,60 +8,56 @@
 #include <string>
 #include "utilities.cpp"
 
-// Reads and returns a copy of a signed 2 byte integer
-// from the given data starting at the given index.
-int16_t ReadShort(char* dataArray, size_t startIndex) {
-    // upper and lower byte of the end result
-    uint8_t lowerByte;
-    uint8_t upperByte;
-
-    // depending on endianness, either the first byte in the data is the
-    // lower half or the upper half of the 2 bytes
-    if (IsSystemBigEndian()) {
-        upperByte = dataArray[startIndex];
-        lowerByte = dataArray[startIndex + 1];
-    } else {
-        lowerByte = dataArray[startIndex];
-        upperByte = dataArray[startIndex + 1];
-    }
-
-    // copying the upper half into a cleared out int
-    // then shifting it to leave the lower half empty for the lower byte
-    return ((0 | upperByte) << 8) | lowerByte;
-}
-
 // Reads and returns a copy of an unsigned 2 byte integer
-// from the given data starting at the given index. This is the same logic
-// as ReadShort but the bytes are reinterpreted as unsigned.
-uint16_t ReadUnsignedShort(char* dataArray, size_t startIndex) {
-    return 0u | ReadShort(dataArray, startIndex);
-}
-
-// Reads and returns a copy of a signed 4 byte integer
-// from the given data starting at the given index.
-int32_t ReadInt(char* dataArray, size_t startIndex) {
-    int32_t intValue = 0;
+// from the 'data' starting at 'startIndex'.
+uint16_t ReadUnsignedShort(char* data, size_t startIndex) {
+    uint16_t value = 0;
 
     if (IsSystemBigEndian()) {
-        intValue = (intValue | dataArray[startIndex]) << 24;
-        intValue = (intValue | dataArray[startIndex + 1]) << 16;
-        intValue = (intValue | dataArray[startIndex + 2]) << 8;
-        intValue = (intValue | dataArray[startIndex + 3]);
+        value = (value | data[startIndex]) << 8;
+        value = (value | data[startIndex + 1]);
     } else {
-        intValue = (intValue | dataArray[startIndex + 3]) << 24;
-        intValue = (intValue | dataArray[startIndex + 2]) << 16;
-        intValue = (intValue | dataArray[startIndex + 1]) << 8;
-        intValue = (intValue | dataArray[startIndex]);
+        value = (value | data[startIndex + 1]) << 8;
+        value = (value | data[startIndex]);
     }
 
-    return intValue;
+    return value;
+}
+
+// Reads and returns a copy of a signed 2 byte integer
+// from 'data' starting at 'startIndex'. This is the same logic
+// as ReadUnsignedShort but the bytes are reinterpreted as signed.
+int16_t ReadShort(char* data, size_t startIndex) {
+    int16_t s = 0;
+    return s | ReadUnsignedShort(data, startIndex);
 }
 
 // Reads and returns a copy of an unsigned 4 byte integer
-// from the given data starting at the given index. This is the same logic
-// as ReadInt but bytes are reinterpreted as unsigned.
-uint32_t ReadUnsignedInt(char* dataArray, size_t startIndex) {
-    return 0u | ReadInt(dataArray, startIndex);
+// from 'data' starting at 'startIndex'.
+uint32_t ReadUnsignedInt(char* data, size_t startIndex) {
+    uint32_t value = 0;
+
+    if (IsSystemBigEndian()) {
+        value = (value | data[startIndex]) << 8;
+        value = (value | data[startIndex + 1]) << 8;
+        value = (value | data[startIndex + 2]) << 8;
+        value = (value | data[startIndex + 3]);
+    } else {
+        value = (value | data[startIndex + 3]) << 8;
+        value = (value | data[startIndex + 2]) << 8;
+        value = (value | data[startIndex + 1]) << 8;
+        value = (value | data[startIndex]);
+    }
+
+    return value;
+}
+
+// Reads and returns a copy of a signed 4 byte integer
+// from 'data' starting at 'startIndex'. This is the same logic
+// as ReadUnsignedInt but bytes are reinterpreted as signed.
+int32_t ReadInt(char* data, size_t startIndex) {
+    int32_t i = 0;
+    return i | ReadUnsignedInt(data, startIndex);
 }
 
 // Reads and copies 'length' number of characters from 'sourceData'
