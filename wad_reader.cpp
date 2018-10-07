@@ -33,8 +33,8 @@ uint16_t ReadUnsignedShort(char* data, size_t startIndex) {
 // from 'data' starting at 'startIndex'. This is the same logic
 // as ReadUnsignedShort but the bytes are reinterpreted as signed.
 int16_t ReadShort(char* data, size_t startIndex) {
-    int16_t s = 0;
-    return s | ReadUnsignedShort(data, startIndex);
+    // NOTE: this cast from unsigned to signed is implementation defined behaviour
+    return ReadUnsignedShort(data, startIndex);
 }
 
 // Reads and returns a copy of an unsigned 4 byte integer
@@ -66,8 +66,8 @@ uint32_t ReadUnsignedInt(char* data, size_t startIndex) {
 // from 'data' starting at 'startIndex'. This is the same logic
 // as ReadUnsignedInt but bytes are reinterpreted as signed.
 int32_t ReadInt(char* data, size_t startIndex) {
-    int32_t i = 0;
-    return i | ReadUnsignedInt(data, startIndex);
+    // NOTE: this cast from unsigned to signed is implementation defined behaviour
+    return ReadUnsignedInt(data, startIndex);
 }
 
 // Reads and copies 'length' number of characters from 'sourceData'
