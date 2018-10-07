@@ -12,13 +12,18 @@
 // from the 'data' starting at 'startIndex'.
 uint16_t ReadUnsignedShort(char* data, size_t startIndex) {
     uint16_t value = 0;
+    // Turns out, chars are considered to be signed by default, so when used
+    // in arithmetic, the char is promoted to a signed int, promotions maintain
+    // value so if the char had a "negative" value the int will be negative
+    // which will screw up with the end result when the OR is done.
+    uint8_t* dataAsUnsigned = reinterpret_cast<uint8_t*>(data);
 
     if (IsSystemBigEndian()) {
-        value = (value | data[startIndex]) << 8;
-        value = (value | data[startIndex + 1]);
+        value = (value | dataAsUnsigned[startIndex]) << 8;
+        value = (value | dataAsUnsigned[startIndex + 1]);
     } else {
-        value = (value | data[startIndex + 1]) << 8;
-        value = (value | data[startIndex]);
+        value = (value | dataAsUnsigned[startIndex + 1]) << 8;
+        value = (value | dataAsUnsigned[startIndex]);
     }
 
     return value;
@@ -36,17 +41,22 @@ int16_t ReadShort(char* data, size_t startIndex) {
 // from 'data' starting at 'startIndex'.
 uint32_t ReadUnsignedInt(char* data, size_t startIndex) {
     uint32_t value = 0;
+    // Turns out, chars are considered to be signed by default, so when used
+    // in arithmetic, the char is promoted to a signed int, promotions maintain
+    // value so if the char had a "negative" value the int will be negative
+    // which will screw up with the end result when the OR is done.
+    uint8_t* dataAsUnsigned = reinterpret_cast<uint8_t*>(data);
 
     if (IsSystemBigEndian()) {
-        value = (value | data[startIndex]) << 8;
-        value = (value | data[startIndex + 1]) << 8;
-        value = (value | data[startIndex + 2]) << 8;
-        value = (value | data[startIndex + 3]);
+        value = (value | dataAsUnsigned[startIndex]) << 8;
+        value = (value | dataAsUnsigned[startIndex + 1]) << 8;
+        value = (value | dataAsUnsigned[startIndex + 2]) << 8;
+        value = (value | dataAsUnsigned[startIndex + 3]);
     } else {
-        value = (value | data[startIndex + 3]) << 8;
-        value = (value | data[startIndex + 2]) << 8;
-        value = (value | data[startIndex + 1]) << 8;
-        value = (value | data[startIndex]);
+        value = (value | dataAsUnsigned[startIndex + 3]) << 8;
+        value = (value | dataAsUnsigned[startIndex + 2]) << 8;
+        value = (value | dataAsUnsigned[startIndex + 1]) << 8;
+        value = (value | dataAsUnsigned[startIndex]);
     }
 
     return value;
